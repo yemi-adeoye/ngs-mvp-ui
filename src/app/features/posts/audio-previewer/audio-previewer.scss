@@ -1,0 +1,57 @@
+@use '../../../../styles/variables' as ngs;
+
+.audio-previewer-container {
+  border: 1px solid #ccc;
+  min-height: 200px;
+  width: 250px;
+}
+
+.controls {
+  border-top: 1px solid ngs.$ngs-border;
+}
+
+.time {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.control-icon {
+  cursor: pointer;
+  color: #000;
+
+  &:hover {
+    color: ngs.$ngs-teal;
+  }
+
+  &:disabled {
+    color: #adb5bd;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ngs.$ngs-teal;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+.delete {
+  &:hover {
+    color: #dc3545;
+  }
+}
+
+.recording-dot {
+  color: #dc3545;
+  font-size: 1rem;
+
+  &.is-recording {
+    animation: recording-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes recording-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}

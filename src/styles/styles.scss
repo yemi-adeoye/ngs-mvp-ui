@@ -1,0 +1,31 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'bootstrap';
+@use 'globals';
+@use 'variables' as *;
+
+.btn-primary {
+  --bs-btn-color: #{$ngs-white};
+  --bs-btn-hover-color: #{$ngs-white};
+  --bs-btn-active-color: #{$ngs-white};
+
+  --bs-btn-bg: #{$ngs-teal};
+  --bs-btn-border-color: #{$ngs-teal};
+
+  --bs-btn-hover-bg: #{$ngs-deep-teal};
+  --bs-btn-hover-border-color: #{$ngs-deep-teal};
+
+  --bs-btn-active-bg: #{$ngs-deep-teal};
+  --bs-btn-active-border-color: #{$ngs-deep-teal};
+}
+
+.logo-text-teal {
+  color: $ngs-teal;
+}
+
+.logo-text {
+  font-weight: 800;
+  font-size: 1.4em;
+  margin: auto;
+  text-align: center;
+  letter-spacing: 1px;
+}

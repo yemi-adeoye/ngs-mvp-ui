@@ -1,0 +1,51 @@
+// ============================================
+// NGS COLORS
+// ============================================
+
+// Brand
+$ngs-teal: #008c95;
+$ngs-deep-teal: #006b73;
+
+// Text
+$ngs-ink: #1d2326;
+$ngs-dark: #252a2d;
+$ngs-gray: #697277;
+
+// Borders / Grays
+$ngs-light-gray: #e5e8e9;
+$ngs-border-subtle: #eef0f1;
+$ngs-border: #cbcdce;
+
+// Surfaces
+$ngs-background: #f7f8f8;
+$ngs-surface: #ffffff;
+$ngs-white: #ffffff;
+
+// ============================================
+// NGS TYPOGRAPHY
+// ============================================
+$ngs-font-family:
+  'Plus Jakarta Sans Variable',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  sans-serif;
+
+// ============================================
+// NGS BORDER RADIUS
+// ============================================
+
+$ngs-radius-sm: 6px;
+$ngs-radius-md: 8px;
+$ngs-radius-lg: 14px;
+$ngs-radius-xl: 20px;
+
+// ============================================
+// NGS SHADOWS
+// ============================================
+
+$ngs-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+$ngs-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+$ngs-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);

@@ -1,0 +1,57 @@
+@use 'variables' as *;
+
+// ============================================
+// GLOBAL RESET
+// ============================================
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+// ============================================
+// BODY
+// ============================================
+
+body {
+  background-color: $ngs-background;
+  color: $ngs-ink;
+  font-family: $ngs-font-family;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ============================================
+// HEADINGS
+// ============================================
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $ngs-ink;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+// ============================================
+// LINKS
+// ============================================
+
+a {
+  color: $ngs-teal;
+  text-decoration: none;
+
+  &:hover {
+    color: $ngs-deep-teal;
+  }
+}

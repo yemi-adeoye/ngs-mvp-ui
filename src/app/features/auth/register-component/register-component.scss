@@ -1,0 +1,32 @@
+@media (min-width: 800px) {
+  .w-md-75 {
+    width: 75%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1300px) {
+  .ngs-pt-8 {
+    padding-top: 1em;
+  }
+}
+
+.ngs-control {
+  height: 57px;
+}
+
+.error {
+  color: red !important;
+}
+
+.show {
+  visibility: visible;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.error-container {
+  border: 1px solid red;
+  background-color: rgba(255, 0, 0, 0.096);
+}

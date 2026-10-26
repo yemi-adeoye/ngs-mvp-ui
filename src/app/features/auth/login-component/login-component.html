@@ -1,0 +1,56 @@
+<div class="min-vh-100 ngs-pt-8 container-fluid">
+  <div class="row">
+    <div class="col-12 col-md-4 m-auto">
+      <ngs-ngs-logo />
+
+      <h1 class="logo-text ngs-mb-8">NaijaGist<span class="logo-text-teal">Soccer</span></h1>
+    </div>
+
+    @if (loginError()) {
+      <div class="m-auto mt-4 mb-4 w-md-75 text-center red error rounded-1 error-container p-2">
+        {{ loginError() }}
+      </div>
+    }
+
+    <form class="login-form w-md-75 m-auto" [formGroup]="loginForm">
+      <div class="form-group" class="mb-4">
+        <input
+          type="text"
+          id="txtUsername"
+          class="form-control ngs-control-text"
+          placeholder="Username"
+          formControlName="username"
+        />
+        @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
+          <small class="form-text text-muted d-block w-100 error">Username is required</small>
+        }
+      </div>
+      <div class="form-group" class="mb-5">
+        <input
+          type="password"
+          id="txtPassword"
+          class="form-control ngs-control-text"
+          placeholder="Password"
+          formControlName="password"
+        />
+        @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
+          <small class="form-text text-muted d-block w-100 error">Password is required</small>
+        }
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary w-100 mb-2"
+        (click)="handleLoginButtonClick()"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+      <small class="form-text text-muted text-center d-block w-100 mb-5"
+        ><a link="/forgot-password">Forgot Password?</a></small
+      >
+      <button class="btn btn-outline-primary w-100 mb-4" (click)="handleRegisterButtonClick()">
+        Register
+      </button>
+    </form>
+  </div>
+</div>

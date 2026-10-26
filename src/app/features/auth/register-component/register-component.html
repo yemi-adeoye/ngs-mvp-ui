@@ -1,0 +1,155 @@
+<div class="min-vh-100 ngs-pt-8 container-fluid">
+  <div class="row">
+    <div class="m-auto mt-4 mb-4">
+      <ngs-ngs-logo />
+
+      <h1 class="logo-text text-center ngs-mb-8">
+        NaijaGist<span class="logo-text-teal">Soccer</span>
+      </h1>
+    </div>
+
+    @if (registrationError()) {
+      <div class="m-auto mt-4 mb-4 w-md-75 text-center red error rounded-1 error-container p-2">
+        {{ registrationError() }}
+      </div>
+    }
+
+    <form class="register-form w-md-75 m-auto" [formGroup]="registrationForm">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <div class="form-group" class="mb-4">
+            <input
+              type="text"
+              id="txtFirstName"
+              class="form-control ngs-control"
+              placeholder="First Name"
+              formControlName="firstName"
+            />
+
+            <small
+              class="form-text text-muted d-block w-100 error"
+              [ngClass]="
+                registrationForm.controls.firstName.touched &&
+                registrationForm.controls.firstName.invalid
+                  ? 'show'
+                  : 'hide'
+              "
+              >First name is required</small
+            >
+          </div>
+
+          <div class="form-group" class="mb-4">
+            <input
+              type="text"
+              id="txtLastName"
+              class="form-control ngs-control"
+              placeholder="Last Name"
+              formControlName="lastName"
+            />
+
+            <small
+              class="form-text text-muted d-block w-100 error"
+              [ngClass]="
+                registrationForm.controls.lastName.touched &&
+                registrationForm.controls.lastName.invalid
+                  ? 'show'
+                  : 'hide'
+              "
+              >Last name is required</small
+            >
+          </div>
+
+          <div class="form-group" class="mb-4">
+            <input
+              type="text"
+              id="txtEmail"
+              class="form-control ngs-control"
+              placeholder="Email"
+              formControlName="email"
+            />
+
+            <small
+              class="form-text text-muted d-block w-100 error"
+              [ngClass]="
+                registrationForm.controls.email.touched && registrationForm.controls.email.invalid
+                  ? 'show'
+                  : 'hide'
+              "
+              >Email is required</small
+            >
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <div class="form-group" class="mb-4">
+            <input
+              type="text"
+              id="txtUsername"
+              class="form-control ngs-control"
+              placeholder="Username"
+              formControlName="username"
+            />
+
+            <small
+              class="form-text text-muted d-block w-100 error"
+              [ngClass]="
+                registrationForm.controls.username.touched &&
+                registrationForm.controls.username.invalid
+                  ? 'show'
+                  : 'hide'
+              "
+              >Username is required and must only contain letters, numbers, and underscores</small
+            >
+          </div>
+          <div class="form-group" class="mb-4">
+            <input
+              type="password"
+              id="txtPassword"
+              class="form-control ngs-control"
+              placeholder="Password"
+              formControlName="password"
+            />
+
+            <small
+              class="form-text text-muted d-block w-100 error"
+              [ngClass]="
+                registrationForm.controls.password.touched &&
+                registrationForm.controls.password.invalid
+                  ? 'show'
+                  : 'hide'
+              "
+              >Password is required, and must contain at least one uppercase and one lowercase
+              character and a digit</small
+            >
+          </div>
+          <div class="form-group" class="mb-4">
+            <input
+              type="date"
+              id="txtDateOfBirth"
+              class="form-control ngs-control"
+              formControlName="dateOfBirth"
+            />
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 m-auto mb-5">
+          <button
+            class="btn btn-primary w-100 mt-4"
+            [disabled]="registrationForm.invalid"
+            (click)="handleRegistrationButtonClick()"
+          >
+            Register
+          </button>
+
+          <small class="form-text text-muted text-center d-block w-100 mt-5"
+            >Have an account?</small
+          >
+
+          <button class="btn btn-outline-primary w-100 mt-4" (click)="handleLoginButtonClick()">
+            Login
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

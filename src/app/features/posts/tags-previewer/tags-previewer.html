@@ -1,0 +1,8 @@
+<div class="col-sm-12 mt-2 mb-2">
+  @for (tag of previewTags; track tag) {
+    <span class="badge rounded-pil border border-primary text-primary me-2 mt-2">
+      <span>{{ tag }}</span>
+      <button class="ms-2" (click)="onSelectedTagDelete(tag)">X</button>
+    </span>
+  }
+</div>

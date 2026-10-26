@@ -1,0 +1,96 @@
+<div class="row border-ngs rounded m-2">
+  <div class="col-sm-12 p-2">
+    <form [formGroup]="postForm">
+      <div class="composer-input border-ngs rounded">
+        <textarea
+          #contentTextArea
+          class="form-control composer-textarea"
+          formControlName="content"
+          placeholder="What's kicking?"
+          rows="1"
+          (input)="resizeTextArea($event)"
+        ></textarea>
+        <div class="composer-actions composer-input mt-2">
+          <input #photoInput type="file" accept="image/*" multiple hidden />
+
+          <button
+            type="button"
+            class="composer-icon tag-remove"
+            aria-label="Record audio"
+            title="Add audio"
+            (click)="addAudioPreviewer()"
+            [disabled]="totalMedia() >= MAX_MEDIA_COUNT"
+          >
+            <i class="bi bi-mic" aria-hidden="true"></i>
+          </button>
+
+          <button
+            type="button"
+            class="composer-icon tag-remove"
+            aria-label="Add photos"
+            title="Add photos"
+            (click)="photoInput.click()"
+          >
+            <i class="bi bi-camera" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <!--Media Previewer-->
+
+      @if (totalMedia()) {
+        <div class="w-100 d-flex mt-2 gap-3 overflow-x-auto">
+          @for (i of audioItems(); track i.id) {
+            <ngs-audio-previewer
+              [recordingId]="i.id"
+              (delete)="handleAudioItemDelete($event)"
+              (recordingComplete)="handleRecordingUpdate($event)"
+            ></ngs-audio-previewer>
+          }
+
+          @for (i of [].constructor(photoCount()); track i) {
+            <!-- Image Viewer -->
+            <ngs-image-previewer></ngs-image-previewer>
+          }
+        </div>
+      }
+
+      <!-- Tag preview -->
+      <div class="col-sm-12 mt-2 mb-2">
+        @for (tag of previewTags; track tag) {
+          <span class="badge rounded-pill pill-text fw-normal border-ngs p-2 me-2 mt-2">
+            <span>{{ tag.tag }}</span>
+            <button
+              class="tag-remove"
+              type="button"
+              [attr.aria-label]="'Remove ' + tag.tag"
+              (click)="handleTagDelete(tag.id)"
+            >
+              <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          </span>
+        }
+      </div>
+
+      <!-- Tag Selector -->
+      <div class="controls d-flex align-items-center">
+        <select
+          class="form-select border-ngs"
+          aria-label="associated post tags"
+          (change)="populateSelectedTags($event)"
+        >
+          <option selected value="0">Select Tags</option>
+          @for (tag of tags; track tag.id) {
+            @if (!previewTags.some((selected) => selected.id == tag.id)) {
+              <option id="{{ tag.id }}" value="{{ tag.id }}">{{ tag.tag }}</option>
+            }
+          }
+        </select>
+        <!-- Action Button -->
+        <button class="btn btn-primary btn-post ms-2" (click)="handlePostButtonClick()">
+          Kick it!
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

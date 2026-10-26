@@ -1,0 +1,34 @@
+@use 'variables' as *;
+
+// Bootstrap functions
+@import 'bootstrap/scss/functions';
+
+// ============================================
+// Bootstrap Theme Overrides
+// ============================================
+
+$primary: $ngs-teal;
+$secondary: $ngs-gray;
+
+$success: $ngs-teal;
+$dark: $ngs-dark;
+$light: $ngs-light-gray;
+
+$body-bg: $ngs-background;
+$body-color: $ngs-ink;
+
+$border-color: $ngs-light-gray;
+
+// Typography
+$font-family-sans-serif: $ngs-font-family;
+
+// Border radius
+$border-radius: $ngs-radius-md;
+$border-radius-sm: $ngs-radius-sm;
+$border-radius-lg: $ngs-radius-lg;
+$border-radius-xl: $ngs-radius-xl;
+
+// ============================================
+// Bootstrap
+// ============================================
+@import 'bootstrap/scss/bootstrap';
