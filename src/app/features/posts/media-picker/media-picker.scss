@@ -1,0 +1,12 @@
+@use '../../../../styles/variables' as ngs;
+.media-option {
+  &:hover {
+    background-color: #f8f9fa;
+    border-color: ngs.$ngs-teal !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ngs.$ngs-teal;
+    outline-offset: 2px;
+  }
+}

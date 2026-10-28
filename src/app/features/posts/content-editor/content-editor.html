@@ -11,46 +11,54 @@
           (input)="resizeTextArea($event)"
         ></textarea>
         <div class="composer-actions composer-input mt-2">
-          <input #photoInput type="file" accept="image/*" multiple hidden />
-
-          <button
-            type="button"
-            class="composer-icon tag-remove"
-            aria-label="Record audio"
-            title="Add audio"
-            (click)="addAudioPreviewer()"
-            [disabled]="totalMedia() >= MAX_MEDIA_COUNT"
-          >
-            <i class="bi bi-mic" aria-hidden="true"></i>
-          </button>
-
           <button
             type="button"
             class="composer-icon tag-remove"
             aria-label="Add photos"
             title="Add photos"
-            (click)="photoInput.click()"
+            (click)="handleMediaButtonClick()"
+            [disabled]="totalMedia() >= MAX_MEDIA_COUNT"
           >
             <i class="bi bi-camera" aria-hidden="true"></i>
           </button>
         </div>
       </div>
 
+      @if (mediaMode() === 'picker') {
+        <ngs-media-picker
+          (mediaMode)="handleMediaModeSelect($event)"
+          (fileSelected)="handleFileSelect()"
+        ></ngs-media-picker>
+      }
+
+      @if (mediaMode() === 'audio') {
+        <ngs-audio-capture
+          (mediaMode)="handleMediaModeSelect($event)"
+          (recordingComplete)="handleRecordingUpdate($event)"
+        ></ngs-audio-capture>
+      }
+
+      @if (mediaMode() === 'photo') {
+        <ngs-photo-capture (mediaMode)="handleMediaModeSelect($event)"></ngs-photo-capture>
+      }
+
+      @if (mediaMode() === 'video') {
+        <ngs-video-capture (mediaMode)="handleMediaModeSelect($event)"></ngs-video-capture>
+      }
+
+      <input #mediaInput type="file" accept="image/*, video/*" multiple hidden />
+
       <!--Media Previewer-->
 
       @if (totalMedia()) {
         <div class="w-100 d-flex mt-2 gap-3 overflow-x-auto">
-          @for (i of audioItems(); track i.id) {
+          @for (i of audioRecordings(); track i.id) {
             <ngs-audio-previewer
               [recordingId]="i.id"
+              [audioUrl]="i.url"
+              [audioDuration]="i.duration"
               (delete)="handleAudioItemDelete($event)"
-              (recordingComplete)="handleRecordingUpdate($event)"
             ></ngs-audio-previewer>
-          }
-
-          @for (i of [].constructor(photoCount()); track i) {
-            <!-- Image Viewer -->
-            <ngs-image-previewer></ngs-image-previewer>
           }
         </div>
       }

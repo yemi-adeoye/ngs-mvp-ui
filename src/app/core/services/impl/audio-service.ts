@@ -1,10 +1,10 @@
 import { Service } from '@angular/core';
 import { Subject } from 'rxjs';
+import { MediaRecording } from '../../../models/media';
 
-export interface AudioRecording {
-  blob: Blob,
-  duration: number
-  id: string
+
+export interface AudioRecording extends MediaRecording {
+
 }
 
 @Service()
@@ -38,7 +38,9 @@ export class AudioService {
 
       const duration = Math.floor((Date.now() - this.recordingStartTime) / 1000)
 
-      this.recordingCompleteSubject.next({ id: this.currentRecordingId!, blob, duration })
+      const audioUrl = URL.createObjectURL(blob);
+
+      this.recordingCompleteSubject.next({ id: this.currentRecordingId!, blob, duration, url: audioUrl })
     }
     )
   }

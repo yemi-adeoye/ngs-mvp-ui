@@ -1,0 +1,113 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" id="mediaPicker">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-flex">
+        <h5 class="modal-title">Capture a Video</h5>
+
+        <button
+          type="button"
+          class="btn-close ms-auto"
+          aria-label="Close"
+          (click)="handleCloseButtonClick()"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="video-previewer-container d-flex flex-column border rounded">
+          <video
+            class="w-100"
+            #videoPlayer
+            (ended)="handlePlayEnded()"
+            muted
+            playsInline
+            controls
+            [src]="videoUrl"
+          ></video>
+
+          <!-- @if (controlState() == 'IDLE' || controlState() == 'RECORDED') {
+              <span class="d-block mt-3 small"> Max length: 60s</span>
+            } -->
+          <!-- @if (controlState() == 'RECORDING') {
+              <span class="d-block mt-3 small"> Time left: {{ recordingDuration() }}</span>
+            } -->
+
+          <div class="controls d-flex align-items-center mt-auto border-top gap-2 small">
+            <button
+              class="btn btn-link p-0 control-icon ms-1"
+              [disabled]="canDisablePlayback"
+              (click)="handlePlayback()"
+            >
+              @if (playbackState() == 'IDLE' || playbackState() == 'PAUSED') {
+                <i class="bi bi-play-fill" [class.text-gray]="controlState() == 'canPlay'"></i>
+              }
+              @if (playbackState() == 'PLAYING') {
+                <i class="bi bi-pause-fill" [class.text-gray]="controlState() == 'canPlay'"></i>
+              }
+              @if (playbackState() == 'PLAYED') {
+                <i
+                  class="bi bi-arrow-counterclockwise"
+                  [class.text-gray]="controlState() == 'canPlay'"
+                ></i>
+              }
+            </button>
+
+            <div class="progress flex-grow-1">
+              <div
+                class="progress-bar progress-bar-animated"
+                role="progressbar"
+                [style.width.%]="playbackPercent()"
+                [aria-valuenow]="videoCurrentTime()"
+                [aria-valuemin]="0"
+                [aria-valuemax]="100"
+              ></div>
+            </div>
+            <span class="time">
+              <span> {{ formatTime(videoCurrentTime()) }}</span
+              >/
+              <span>{{ formatTime(videoDuration()) }}</span>
+            </span>
+            <button class="btn btn-link p-0 me-1 control-icon" (click)="handleMute()">
+              @if (isMuted()) {
+                <i class="bi bi-volume-mute-fill"></i>
+              } @else {
+                <i class="bi bi-volume-up-fill"></i>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer d-flex">
+        <button
+          class="btn btn-primary"
+          #recordButton
+          type="button"
+          (click)="handleRecordButtonClick()"
+        >
+          @if (controlState() == 'RECORDING' || controlState() == 'PLAYING') {
+            <i
+              class="bi bi-circle-fill recording-dot"
+              [class.text-danger]="controlState() === 'RECORDING'"
+              [class.text-dark]="controlState() === 'PLAYING'"
+              [class.is-recording]="controlState() === 'RECORDING'"
+            >
+            </i>
+          } @else if (controlState() == 'RECORDED' || controlState() == 'PLAYED') {
+            Retake
+          } @else {
+            Record
+          }
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary ms-auto"
+          [disabled]="videoUrl.length == 0"
+          (click)="handleRecordingDone()"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show"></div>

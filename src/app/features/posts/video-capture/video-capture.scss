@@ -1,0 +1,13 @@
+video {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.recording-dot {
+  color: #dc3545;
+  font-size: 1rem;
+
+  &.is-recording {
+    animation: recording-pulse 1.2s ease-in-out infinite;
+  }
+}

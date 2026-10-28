@@ -1,0 +1,27 @@
+@use '../../../../styles/variables' as ngs;
+
+.time {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.audio-previewer-container {
+  min-height: 200px;
+  width: 250px;
+  margin: auto;
+}
+
+.recording-dot {
+  color: #dc3545;
+  font-size: 1rem;
+
+  &.is-recording {
+    animation: recording-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes recording-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
