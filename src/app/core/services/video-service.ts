@@ -14,6 +14,10 @@ export class VideoService {
   private blobChunks: Blob[] = []
   recordingStartTime = 0
 
+  private readonly MAX_RECORDING_TIME = 60_000;
+
+  recordingTimer: ReturnType<typeof setInterval> | null = null;
+
   private recordingCompleteSubject = new Subject<VideoRecording>();
   private currentRecordingId: string | null = null
   recordingComplete$ = this.recordingCompleteSubject.asObservable()
@@ -33,7 +37,7 @@ export class VideoService {
     });
 
     this.recorder.addEventListener('stop', () => {
-      // this.clearRecordingTimer();
+      this.clearRecordingTimer();
 
       const blob = new Blob(this.blobChunks, { type: this.recorder?.mimeType })
 
@@ -49,18 +53,27 @@ export class VideoService {
 
   startRecording(id: string, onTimeUpdate: (elapsedSeconds: number) => void) {
     if (!this.recorder) {
-      throw new Error('Audio recorder has not been initialized!')
+      throw new Error('Video recorder has not been initialized!')
     }
 
+    this.currentRecordingId = id
+
     this.blobChunks = []
+    this.recordingStartTime = Date.now()
 
     this.recorder.start()
+
+    this.recordingTimer = setInterval(() => {
+      const elaspedSeconds = Math.floor((Date.now() - this.recordingStartTime) / 1000)
+      onTimeUpdate(elaspedSeconds)
+      this.enforceMaxRecordingTime()
+    }, 250)
 
   }
 
   stopRecording() {
     if (!this.recorder) {
-      throw new Error('Audio recorder has not been initialized!')
+      throw new Error('Video recorder has not been initialized!')
     }
 
     this.recorder.stop()
@@ -68,5 +81,26 @@ export class VideoService {
 
   get mediaStream() {
     return this.stream()
+  }
+
+  private enforceMaxRecordingTime(): void {
+    if (Date.now() - this.recordingStartTime >= this.MAX_RECORDING_TIME && this.recorder?.state === 'recording') {
+      this.recorder?.stop()
+    }
+  }
+
+  private clearRecordingTimer(): void {
+    if (this.recordingTimer) {
+      clearInterval(this.recordingTimer)
+      this.recordingTimer = null
+    }
+  }
+
+  destroy(): void {
+    this.clearRecordingTimer();
+    this.stream()?.getTracks().forEach(track => track.stop())
+    this.stream.set(null)
+    this.recorder = null
+    this.blobChunks = []
   }
 }

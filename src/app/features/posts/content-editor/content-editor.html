@@ -34,16 +34,20 @@
       @if (mediaMode() === 'audio') {
         <ngs-audio-capture
           (mediaMode)="handleMediaModeSelect($event)"
-          (recordingComplete)="handleRecordingUpdate($event)"
+          (recordingComplete)="handleAudioRecordingUpdate($event)"
         ></ngs-audio-capture>
+      }
+
+      @if (mediaMode() === 'video') {
+        <ngs-video-capture
+          (mediaMode)="handleMediaModeSelect($event)"
+          (recordingComplete)="handleVideoRecordingUpdate($event)"
+        >
+        </ngs-video-capture>
       }
 
       @if (mediaMode() === 'photo') {
         <ngs-photo-capture (mediaMode)="handleMediaModeSelect($event)"></ngs-photo-capture>
-      }
-
-      @if (mediaMode() === 'video') {
-        <ngs-video-capture (mediaMode)="handleMediaModeSelect($event)"></ngs-video-capture>
       }
 
       <input #mediaInput type="file" accept="image/*, video/*" multiple hidden />

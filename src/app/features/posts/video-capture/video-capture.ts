@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal, computed, ElementRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, signal, computed, ElementRef, ViewChild, Input } from '@angular/core';
 import { MediaMode } from '../content-editor/content-editor';
 import { IDLE, MediaState, PLAYED, RECORDED, RECORDING } from '../../../models/media.state';
 import { VideoRecording, VideoService } from '../../../core/services/video-service';
@@ -11,11 +11,19 @@ import { VideoRecording, VideoService } from '../../../core/services/video-servi
   providers: [VideoService]
 })
 export class VideoCapture {
+  recordingId: string = crypto.randomUUID()
+
   @Output()
   mediaMode: EventEmitter<MediaMode> = new EventEmitter()
 
-  @ViewChild('videoPlayer')
-  videoPlayer!: ElementRef<HTMLVideoElement>
+  @Output()
+  recordingComplete: EventEmitter<VideoRecording> = new EventEmitter()
+
+  @ViewChild('camera')
+  cameraElementRef!: ElementRef<HTMLVideoElement>
+
+  @ViewChild('recordingPreviewer')
+  recordingPreviewerElementRef!: ElementRef<HTMLVideoElement>
 
   recordingDuration = signal<number>(0)
   videoDuration = signal<number>(0)
@@ -31,7 +39,7 @@ export class VideoCapture {
   playbackState = signal<MediaState>(IDLE)
   isMuted = signal<boolean>(false)
 
-  videoUrl: string = ''
+  videoUrl = signal<string>('')
 
   recordedVideo: VideoRecording = {
     blob: null,
@@ -45,11 +53,9 @@ export class VideoCapture {
   async ngAfterViewInit(): Promise<void> {
     try {
       await this.videoService.inititalize()
-      const stream = this.videoService.mediaStream
 
-      if (stream) {
-        this.videoPlayer.nativeElement.srcObject = stream
-        await this.videoPlayer.nativeElement.play()
+      if (this.cameraElementRef) {
+        await this.attachCamera(this.cameraElementRef);
       }
 
       this.videoService.recordingComplete$.subscribe({
@@ -63,6 +69,10 @@ export class VideoCapture {
 
   }
 
+  ngOnDestroy(): void {
+    this.videoService.destroy();
+  }
+
   handleCloseButtonClick() {
     this.mediaMode.emit('picker')
   }
@@ -72,12 +82,16 @@ export class VideoCapture {
       case IDLE:
       case RECORDED:
       case PLAYED:
-        this.videoService.startRecording('this.recordingId', (elapsedSeconds) => {
+        console.log(this.recordingId)
+        this.controlState.set(RECORDING)
+
+
+        this.videoService.startRecording(this.recordingId, (elapsedSeconds) => {
           const remaining = Math.max(0, 60 - elapsedSeconds)
           this.recordingDuration.set(remaining)
         })
 
-        this.controlState.set(RECORDING)
+
         this.playbackState.set(IDLE)
         this.recordingDuration.set(0)
         break;
@@ -100,7 +114,7 @@ export class VideoCapture {
 
   handleMute() {
     this.isMuted.set(!this.isMuted())
-    this.videoPlayer.nativeElement.muted = this.isMuted()
+    this.recordingPreviewerElementRef.nativeElement.muted = this.isMuted()
   }
 
   handlePlayEnded() {
@@ -108,9 +122,32 @@ export class VideoCapture {
   }
 
   handleRecordingDone() {
-
+    this.mediaMode.emit(null)
+    this.recordingComplete.emit(this.recordedVideo)
   }
 
+  @ViewChild('camera')
+  set cameraElement(element: ElementRef<HTMLVideoElement> | undefined) {
+    if (element) {
+      void this.attachCamera(element);
+    }
+  }
+
+  private async attachCamera(
+    element: ElementRef<HTMLVideoElement>
+  ): Promise<void> {
+    const stream = this.videoService.mediaStream;
+
+    if (stream) {
+      element.nativeElement.srcObject = stream;
+
+      try {
+        await element.nativeElement.play();
+      } catch (error) {
+        console.error('Unable to play camera stream', error);
+      }
+    }
+  }
 
 
   get canDisablePlayback() {
@@ -131,7 +168,7 @@ export class VideoCapture {
       return
     }
 
-    this.videoUrl = recording.url
+    this.videoUrl.set(recording.url)
 
     this.videoDuration.set(recording.duration);
     this.recordingDuration.set(recording.duration);

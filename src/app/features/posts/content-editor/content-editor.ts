@@ -7,6 +7,7 @@ import { MediaPicker } from '../media-picker/media-picker';
 import { PhotoCapture } from '../photo-capture/photo-capture';
 import { VideoCapture } from '../video-capture/video-capture';
 import { AudioCapture } from '../audio-capture/audio-capture';
+import { VideoRecording } from '../../../core/services/video-service';
 
 
 
@@ -20,12 +21,12 @@ export type MediaMode = 'audio' | 'photo' | 'video' | 'picker' | null
 })
 export class ContentEditor {
   audioRecordings = signal<AudioRecording[]>([])
+  videoRecordings = signal<VideoRecording[]>([])
   photoCount = signal<number>(0)
-  videoCount = signal<number>(0)
 
   mediaMode = signal<MediaMode>(null)
 
-  totalMedia = computed<number>(() => this.audioRecordings().length + this.photoCount() + this.videoCount())
+  totalMedia = computed<number>(() => this.audioRecordings().length + this.photoCount() + this.videoRecordings().length)
   MAX_MEDIA_COUNT = 5
 
   postForm = new FormGroup({
@@ -67,11 +68,16 @@ export class ContentEditor {
     this.previewTags = this.previewTags.filter(tag => tag.id != tagDeleted)
   }
 
-  handleRecordingUpdate(recording: AudioRecording) {
+  handleAudioRecordingUpdate(recording: AudioRecording) {
     const without = this.audioRecordings().filter(rec => rec.id != recording.id)
     this.audioRecordings.set([...without, recording])
 
-    console.log(this.audioRecordings())
+  }
+
+  handleVideoRecordingUpdate(recording: VideoRecording) {
+    const without = this.videoRecordings().filter(rec => rec.id != recording.id)
+    this.videoRecordings.set([...without, recording])
+
   }
 
   handlePostButtonClick() {

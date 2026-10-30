@@ -14,15 +14,25 @@
 
       <div class="modal-body">
         <div class="video-previewer-container d-flex flex-column border rounded">
-          <video
-            class="w-100"
-            #videoPlayer
-            (ended)="handlePlayEnded()"
-            muted
-            playsInline
-            controls
-            [src]="videoUrl"
-          ></video>
+          @if (controlState() === 'IDLE' || controlState() === 'RECORDING') {
+            <video class="w-100" #camera autoplay muted playsInline controls></video>
+          }
+
+          @if (
+            controlState() === 'RECORDED' ||
+            controlState() === 'PLAYING' ||
+            controlState() === 'PAUSED' ||
+            controlState() === 'PLAYED'
+          ) {
+            <video
+              #recordingPreviewer
+              [src]="videoUrl()"
+              (ended)="handlePlayEnded()"
+              playsinline
+              class="w-100"
+              controls
+            ></video>
+          }
 
           <!-- @if (controlState() == 'IDLE' || controlState() == 'RECORDED') {
               <span class="d-block mt-3 small"> Max length: 60s</span>
@@ -101,7 +111,7 @@
         <button
           type="button"
           class="btn btn-primary ms-auto"
-          [disabled]="videoUrl.length == 0"
+          [disabled]="videoUrl().length == 0"
           (click)="handleRecordingDone()"
         >
           Done

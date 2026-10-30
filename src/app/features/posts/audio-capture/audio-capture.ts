@@ -11,30 +11,22 @@ import { AudioRecording, AudioService } from '../../../core/services/impl/audio-
   providers: [AudioService]
 })
 export class AudioCapture {
+  recordingId: string = crypto.randomUUID()
+
   @Output()
   mediaMode: EventEmitter<MediaMode> = new EventEmitter()
 
-  handleCloseButtonClick() {
-    console.log(this.recordedAudio.url)
-    if (this.recordedAudio.url) {
-      URL.revokeObjectURL(this.recordedAudio.url)
-    }
-    this.mediaMode.emit('picker')
-  }
+  @Output()
+  delete: EventEmitter<string> = new EventEmitter()
+
+  @Output()
+  recordingComplete: EventEmitter<AudioRecording> = new EventEmitter()
+
+  @ViewChild('audioPlayer')
+  audioPlayer!: ElementRef<HTMLAudioElement>
 
   controlState = signal<MediaState>(IDLE)
   playbackState = signal<MediaState>(IDLE)
-
-  recordedAudio: AudioRecording = {
-    blob: null,
-    duration: 0,
-    id: '',
-    url: ''
-  }
-
-  @Input()
-  recordingId: string = crypto.randomUUID()
-
   audioDuration = signal<number>(0)
   audioCurrentTime = signal<number>(0)
   isMuted = signal<boolean>(false)
@@ -44,19 +36,14 @@ export class AudioCapture {
     }
     return Math.round(this.audioCurrentTime() / this.audioDuration() * 100)
   })
-
   recordingDuration = signal<number>(0)
 
-
-  @Output()
-  delete: EventEmitter<string> = new EventEmitter()
-
-  @Output()
-  recordingComplete: EventEmitter<AudioRecording> = new EventEmitter()
-
-
-  @ViewChild('audioPlayer')
-  audioPlayer!: ElementRef<HTMLAudioElement>
+  recordedAudio: AudioRecording = {
+    blob: null,
+    duration: 0,
+    id: '',
+    url: ''
+  }
 
   audioUrl: string = ''
   blobChunks: any[] = []
@@ -97,6 +84,14 @@ export class AudioCapture {
 
   handlePlayEnded() {
     this.playbackState.set(PLAYED)
+  }
+
+  handleCloseButtonClick() {
+    console.log(this.recordedAudio.url)
+    if (this.recordedAudio.url) {
+      URL.revokeObjectURL(this.recordedAudio.url)
+    }
+    this.mediaMode.emit('picker')
   }
 
   handleMute() {
